@@ -1,0 +1,74 @@
+﻿@model List<ProductoModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="crear" class="btn btn-outline-primary">Create New</a>
+</p>
+
+
+
+@using (Html.BeginForm("Index", "Producto", FormMethod.Get))
+{
+    <div class="row mb-4">
+        <div class="col-lg-4">
+            <select class="form-select" name="filtrar">
+                <option value="1">Por Id</option>
+                <option value="2">Por Nombre</option>
+            </select>
+        </div>
+        <div class=col-lg-4>
+            @Html.TextBox("buscar",null,new {@class="form-control"})
+        </div>
+        <div class=col-lg-4>
+            <input type="submit" value="Buscar Aqui" class="form-control" />
+        </div>
+    </div>
+}
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                IDproducto
+            </th>
+            <th>
+               Nombre
+            </th>
+            <th>
+                Estado
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.idproducto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.nameproduct)
+            </td>
+                <td>
+                    @using (Html.BeginForm("updateState", "Producto", FormMethod.Post))
+                    {
+                        @Html.CheckBoxFor(modelItem => item.state)
+                        <input type="submit" value="Guardar cambios" asp-action="updateState" asp-route-id="@item.idproducto" class="btn btn-primary" />
+                    }
+                </td>
+            <td>
+
+                    <a asp-action="edit" asp-route-id="@item.idproducto" class="btn btn-outline-info">Editar</a>
+                    <a asp-action="delete" asp-route-id="@item.idproducto" class="btn btn-outline-danger">Eliminar</a>
+
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
